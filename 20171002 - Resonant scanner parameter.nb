@@ -1,0 +1,283 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     11162,        275]
+NotebookOptionsPosition[     10420,        251]
+NotebookOutlinePosition[     10764,        266]
+CellTagsIndexPosition[     10721,        263]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[StyleBox["The number of pixels and the FOV are limited by the \
+laser repetition rate, i.e., how many laser pulses can fin in a scanned line.\
+\nFor a 80 MHz laser and 8 kHz scanner, there are 80 MHz/(2*8 kHz) = 5000 \
+laser pulses.",
+ FontSize->18]], "Text",
+ CellChangeTimes->{{3.716887811123098*^9, 
+  3.7168880422181997`*^9}},ExpressionUUID->"70a34186-aadd-4b93-adc4-\
+0582233a6c1b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Mu]m", " ", "=", " ", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "6"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Mu]s", "=", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "6"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ms", "=", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "3"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ns", " ", "=", " ", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "9"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mm", "=", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "3"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kHz", "=", 
+   SuperscriptBox["10", "3"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Tline", "=", 
+    RowBox[{"62.5", "\[Mu]s"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Time", " ", "per", " ", "scanned", " ", "line"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Tlaser", " ", "=", " ", 
+    RowBox[{"12.5", "ns"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Laser", " ", "pulse", " ", "repetition", " ", "period"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"tFPGA", " ", "=", " ", 
+    RowBox[{"6.25", "ns"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Clock", " ", "of", " ", "the", " ", "FPGA"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[CapitalDelta]x", "=", 
+    RowBox[{"0.5", "\[Mu]m"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Sampling", " ", "resolution"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Gamma]", "=", "0.8"}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+   "Prefactor", " ", "that", " ", "accounts", " ", "for", " ", "the", " ", 
+    "dead", " ", "time", " ", "at", " ", "the", " ", "turning", " ", 
+    "points"}], "*)"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.7165568122537017`*^9, 3.7165568907173243`*^9}, {
+   3.716557265804223*^9, 3.716557274516399*^9}, 3.7165574177329254`*^9, {
+   3.716557593324402*^9, 3.7165577127160387`*^9}, {3.716632856482833*^9, 
+   3.716632932113447*^9}, {3.7166329728503256`*^9, 3.7166330091540613`*^9}, {
+   3.7166331500499425`*^9, 3.7166332630410414`*^9}, {3.716633579657097*^9, 
+   3.716633582545144*^9}, 3.716633958530452*^9, {3.716635109822214*^9, 
+   3.716635120398712*^9}, 
+   3.7166353345345125`*^9},ExpressionUUID->"db8cebec-eca8-44a5-b756-\
+0a8377eb9652"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"tdwell", "[", "m_", "]"}], ":=", 
+   RowBox[{"m", "*", "tFPGA"}]}], " ", 
+  RowBox[{"(*", 
+   RowBox[{"pixel", " ", "dwell", " ", "time"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Npix", "[", "m_", "]"}], ":=", 
+   RowBox[{"\[Gamma]", " ", 
+    RowBox[{"Tline", "/", 
+     RowBox[{"tdwell", "[", "m", "]"}]}]}]}], 
+  RowBox[{"(*", 
+   RowBox[{"Number", " ", "of", " ", "pixels"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Npp", "[", "m_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"tdwell", "[", "m", "]"}], "/", "Tlaser"}]}], 
+  RowBox[{"(*", 
+   RowBox[{"Laser", " ", "pulses", " ", "per", " ", "pixel"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FFOV", "[", "m_", "]"}], ":=", 
+   RowBox[{"\[CapitalDelta]x", "*", 
+    RowBox[{"Npix", "[", "m", "]"}]}]}], 
+  RowBox[{"(*", 
+   RowBox[{
+   "Full", " ", "field", " ", "of", " ", "view", " ", "at", " ", "or", " ", 
+    "greater", " ", "than", " ", "Nyquist"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"timePerTile", "[", "m_", "]"}], ":=", 
+  RowBox[{"Tline", "*", 
+   RowBox[{"Npix", "[", "m", "]"}], 
+   RowBox[{"(*", 
+    RowBox[{"Imaging", " ", "time", " ", "per", " ", 
+     RowBox[{"tile", ".", " ", "Note"}], " ", "that", " ", "the", " ", "dead",
+      " ", "time", " ", "at", " ", "the", " ", "turning", " ", "points", " ", 
+     "must", " ", "be", " ", "considered"}], "*)"}]}]}]}], "Input",
+ CellChangeTimes->{{3.716556862360222*^9, 3.716556988908932*^9}, {
+   3.716557022997097*^9, 3.716557030796626*^9}, {3.7165570892130375`*^9, 
+   3.7165570919169545`*^9}, {3.7165571769652452`*^9, 
+   3.7165572601081853`*^9}, {3.716557489876067*^9, 3.71655750522795*^9}, {
+   3.7165575635162706`*^9, 3.716557586291416*^9}, {3.7166285273859406`*^9, 
+   3.7166285697609797`*^9}, {3.7166286239373856`*^9, 3.716628624608862*^9}, {
+   3.7166324223390684`*^9, 3.716632461714982*^9}, {3.7166325243223643`*^9, 
+   3.7166325259625273`*^9}, {3.716632602971119*^9, 3.71663263011436*^9}, {
+   3.716632714106902*^9, 3.7166327246823997`*^9}, {3.7166329216430244`*^9, 
+   3.716632922226438*^9}, {3.716632955819252*^9, 3.7166329682590714`*^9}, {
+   3.716633013209936*^9, 3.7166330172417946`*^9}, {3.7166330713541546`*^9, 
+   3.716633071769449*^9}, {3.7166331138412743`*^9, 3.716633130585143*^9}, {
+   3.7166332671779737`*^9, 3.7166332742890153`*^9}, {3.7166339547227526`*^9, 
+   3.7166339566981525`*^9}, {3.7166350277430286`*^9, 3.7166351394862432`*^9}, 
+   3.716635365422409*^9, {3.716635598469616*^9, 3.7166356043417788`*^9}, {
+   3.7166358246059237`*^9, 3.716635824781048*^9}, 3.7166364835340376`*^9, {
+   3.716722360945674*^9, 3.716722403330024*^9}, {3.7171688286654077`*^9, 
+   3.7171688416474314`*^9}},ExpressionUUID->"a825732a-55f3-42ff-bd84-\
+0eac6db9e47d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"header", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<m\>\"", ",", "\"\<Npix\>\"", ",", "\"\<tdwell [ns]\>\"", ",", 
+     "\"\<Npp\>\"", ",", "\"\<FFOV\[LessEqual] [\[Mu]m]\>\"", ",", " ", 
+     "\"\<Time per line [\[Mu]s]\>\"", ",", "\"\<Time per tile [ms]\>\""}], 
+    "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"TableForm", "[", 
+  RowBox[{"Prepend", "[", 
+   RowBox[{
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"m", ",", 
+        RowBox[{"Npix", "[", "m", "]"}], ",", 
+        RowBox[{
+         RowBox[{"tdwell", "[", "m", "]"}], "/", "ns"}], ",", 
+        RowBox[{"Npp", "[", "m", "]"}], ",", 
+        RowBox[{
+         RowBox[{"FFOV", "[", "m", "]"}], "/", "\[Mu]m"}], ",", " ", 
+        RowBox[{"Tline", "/", "\[Mu]s"}], ",", 
+        RowBox[{
+         RowBox[{"timePerTile", "[", "m", "]"}], "/", "ms"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"m", ",", "10", ",", "20"}], "}"}]}], "]"}], ",", "header"}], 
+   "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.71655699516937*^9, 3.716557004845229*^9}, {
+   3.7165570371731462`*^9, 3.7165570725572305`*^9}, {3.716557196525111*^9, 
+   3.716557197196587*^9}, {3.7165572807418127`*^9, 3.716557401205209*^9}, {
+   3.716557474765355*^9, 3.7165574855640106`*^9}, 3.7165575547560606`*^9, {
+   3.7166284598430595`*^9, 3.716628487593732*^9}, {3.7166285762425747`*^9, 
+   3.7166286493774204`*^9}, {3.716632471419862*^9, 3.716632530362646*^9}, {
+   3.7166326359635067`*^9, 3.716632667474846*^9}, {3.7166327331233835`*^9, 
+   3.7166327375545244`*^9}, {3.7166327807311325`*^9, 
+   3.7166327930348544`*^9}, {3.716633077338397*^9, 3.7166330835778203`*^9}, 
+   3.716633957618805*^9, {3.716636480992235*^9, 3.716636484701865*^9}, {
+   3.7167224048190794`*^9, 3.716722410562151*^9}, {3.717168829954323*^9, 
+   3.717168831585481*^9}},ExpressionUUID->"7c2da1aa-b1cb-4fb8-827d-\
+512459c5d14b"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"m\"\>", "\<\"Npix\"\>", "\<\"tdwell [ns]\"\>", "\<\"Npp\"\>", \
+"\<\"FFOV\[LessEqual] [\[Mu]m]\"\>", "\<\"Time per line [\[Mu]s]\"\>", \
+"\<\"Time per tile [ms]\"\>"},
+    {"10", "800.`", "62.50000000000001`", "5.000000000000001`", 
+     "399.99999999999994`", "62.5`", "50.`"},
+    {"11", "727.2727272727274`", "68.75`", "5.5`", "363.6363636363637`", 
+     "62.5`", "45.45454545454546`"},
+    {"12", "666.6666666666666`", "75.00000000000001`", "6.000000000000001`", 
+     "333.3333333333333`", "62.5`", "41.666666666666664`"},
+    {"13", "615.3846153846155`", "81.25`", "6.5`", "307.6923076923077`", 
+     "62.5`", "38.461538461538474`"},
+    {"14", "571.4285714285714`", "87.50000000000001`", "7.000000000000001`", 
+     "285.7142857142857`", "62.5`", "35.71428571428572`"},
+    {"15", "533.3333333333334`", "93.75`", "7.5`", "266.6666666666667`", 
+     "62.5`", "33.33333333333334`"},
+    {"16", "500.`", "100.00000000000001`", "8.`", "250.`", "62.5`", "31.25`"},
+    {"17", "470.58823529411757`", "106.25000000000001`", "8.500000000000002`",
+      "235.29411764705878`", "62.5`", "29.411764705882348`"},
+    {"18", "444.44444444444446`", "112.50000000000001`", "9.`", 
+     "222.2222222222222`", "62.5`", "27.77777777777778`"},
+    {"19", "421.05263157894734`", "118.75000000000001`", "9.500000000000002`",
+      "210.52631578947367`", "62.5`", "26.31578947368421`"},
+    {"20", "400.`", "125.00000000000001`", "10.000000000000002`", 
+     "199.99999999999997`", "62.5`", "25.`"}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[2.0999999999999996`]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.7166364924863834`*^9, 3.716636498231456*^9}, 
+   3.716722352203477*^9, {3.7167224153528533`*^9, 3.716722424219139*^9}, 
+   3.7171478237437253`*^9, 
+   3.7171688362090683`*^9},ExpressionUUID->"09423c19-8a64-4445-83b2-\
+594bb112a20e"]
+}, Open  ]]
+},
+WindowSize->{1157, 856},
+WindowMargins->{{Automatic, 83}, {Automatic, 49}},
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 401, 7, 59, "Text", "ExpressionUUID" -> \
+"70a34186-aadd-4b93-adc4-0582233a6c1b"],
+Cell[962, 29, 2400, 67, 240, "Input", "ExpressionUUID" -> \
+"db8cebec-eca8-44a5-b756-0a8377eb9652"],
+Cell[3365, 98, 2847, 61, 107, "Input", "ExpressionUUID" -> \
+"a825732a-55f3-42ff-bd84-0eac6db9e47d"],
+Cell[CellGroupData[{
+Cell[6237, 163, 1912, 40, 50, "Input", "ExpressionUUID" -> \
+"7c2da1aa-b1cb-4fb8-827d-512459c5d14b"],
+Cell[8152, 205, 2252, 43, 230, "Output", "ExpressionUUID" -> \
+"09423c19-8a64-4445-83b2-594bb112a20e"]
+}, Open  ]]
+}
+]
+*)
+
