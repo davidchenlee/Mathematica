@@ -1,0 +1,608 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     27485,        600]
+NotebookOptionsPosition[     26192,        564]
+NotebookOutlinePosition[     26536,        579]
+CellTagsIndexPosition[     26493,        576]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[StyleBox["Multiplexed imaging via Nchannels beams",
+ FontSize->24]], "Text",
+ CellChangeTimes->{
+  3.7321047059334784`*^9, {3.7321126189864807`*^9, 
+   3.732112619104592*^9}},ExpressionUUID->"ed987538-9f4a-443d-b815-\
+4caed904f120"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Mu]m", " ", "=", " ", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "6"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Mu]s", "=", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "6"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ms", "=", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "3"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ns", " ", "=", " ", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "9"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mm", "=", 
+   SuperscriptBox["10", 
+    RowBox[{"-", "3"}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kHz", "=", 
+   SuperscriptBox["10", "3"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Mbps", "=", 
+   SuperscriptBox["10", "6"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"min", "=", "60"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"hour", "=", "3600"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"mmps", " ", "=", " ", 
+    SuperscriptBox["10", 
+     RowBox[{"-", "3"}]]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"L", "=", 
+    RowBox[{"10", "mm"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Size", " ", "of", " ", "the", " ", "whole", " ", "sample"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[CapitalDelta]z", "=", 
+   RowBox[{"0.5", "\[Mu]m"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"spatial", " ", "sampling", " ", "in", " ", "z"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"Tline", "=", 
+   RowBox[{"62.5", "\[Mu]s"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Time", " ", "per", " ", "scanned", " ", "line"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"Tlaser", " ", "=", " ", 
+   RowBox[{"12.5", "ns"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Laser", " ", "pulse", " ", "repetition", " ", "period"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"tFPGA", " ", "=", " ", 
+   RowBox[{"6.25", "ns"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Clock", " ", "of", " ", "the", " ", "FPGA"}], "*)"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"Nchannels", "=", "16"}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Number", " ", "of", " ", "laser", " ", "beams"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"Nbits", "=", "4"}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Number", " ", "of", " ", "bits", " ", "per", " ", "pixel"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"NpixWidth", "=", " ", "400"}], ";", " ", 
+  RowBox[{"(*", 
+   RowBox[{"Number", " ", "of", " ", "pixels", " ", "per", " ", "line"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"NpixHeight", "=", "25"}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Number", " ", "of", " ", "lines", " ", "per", " ", "frame"}], 
+    ",", " ", 
+    RowBox[{"per", " ", 
+     RowBox[{"channel", ".", " ", "The"}], " ", "total", " ", "lines", " ", 
+     "in", " ", "a", " ", "frame", " ", "is", " ", "Nchannels", "*", 
+     "NpixHeight"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"Ntiles", "=", 
+   RowBox[{"50", " ", "50"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Number", " ", "of", " ", "tiles"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"Nframes", "=", "10000"}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Number", " ", "of", " ", "frames"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"FIFOOUTdepth", " ", "=", " ", "131071"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"BWacquisition", "=", 
+    RowBox[{"Nchannels", "*", "Nbits", 
+     FractionBox["NpixWidth", "Tline"]}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Acquisition", " ", "bandwidth", " ", "for", " ", "Nchannels"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"BWreading", "=", 
+   RowBox[{"250.", "Mbps"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Bandwidth", " ", "for", " ", "transfering", " ", "the", " ", "FIFO", " ", 
+    "data", " ", "from", " ", "the", " ", "FPGA", " ", "to", " ", "the", " ", 
+    "computer", " ", 
+    RowBox[{"(", 
+     RowBox[{"experimentally", " ", "measured"}], ")"}]}], "*)"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"tWholeSampleNoPause", "=", 
+   RowBox[{"Ntiles", "*", "Nframes", "*", "NpixHeight", "*", " ", "Tline"}]}],
+   ";"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.7165568122537017`*^9, 3.7165568907173243`*^9}, {
+   3.716557265804223*^9, 3.716557274516399*^9}, 3.7165574177329254`*^9, {
+   3.716557593324402*^9, 3.7165577127160387`*^9}, {3.716632856482833*^9, 
+   3.716632932113447*^9}, {3.7166329728503256`*^9, 3.7166330091540613`*^9}, {
+   3.7166331500499425`*^9, 3.7166332630410414`*^9}, {3.716633579657097*^9, 
+   3.716633582545144*^9}, 3.716633958530452*^9, {3.716635109822214*^9, 
+   3.716635120398712*^9}, 3.7166353345345125`*^9, {3.731842061758013*^9, 
+   3.7318420671338367`*^9}, {3.7318439795665956`*^9, 
+   3.7318439911818466`*^9}, {3.731844174886453*^9, 3.731844175286756*^9}, {
+   3.7318657197465086`*^9, 3.7318657512599335`*^9}, {3.7318660430183744`*^9, 
+   3.7318660434626937`*^9}, {3.7318663502107944`*^9, 3.731866375842019*^9}, {
+   3.7319945954584227`*^9, 3.7319946121853185`*^9}, {3.7319987699339933`*^9, 
+   3.7319987803421783`*^9}, {3.731999509420478*^9, 3.7319995098998184`*^9}, 
+   3.7319995717718096`*^9, {3.7320768274422884`*^9, 3.7320769198900194`*^9}, {
+   3.732077022354891*^9, 3.732077074682079*^9}, {3.73207716347421*^9, 
+   3.7320771645379896`*^9}, {3.7320772135948467`*^9, 
+   3.7320772274827385`*^9}, {3.7320774536595526`*^9, 
+   3.7320774577784634`*^9}, {3.732077609043032*^9, 3.732077654626453*^9}, {
+   3.732077686194888*^9, 3.7320777791549654`*^9}, {3.7320779650751557`*^9, 
+   3.7320779693632255`*^9}, {3.732078076427349*^9, 3.732078085963127*^9}, {
+   3.732078130235607*^9, 3.7320781502908645`*^9}, {3.7320782062666483`*^9, 
+   3.732078257274935*^9}, {3.732078464380186*^9, 3.732078568707344*^9}, {
+   3.732078904739268*^9, 3.7320789094676476`*^9}, {3.7320790484124413`*^9, 
+   3.7320790521550827`*^9}, {3.732079153284005*^9, 3.732079155810783*^9}, {
+   3.7320806473803043`*^9, 3.7320806747957964`*^9}, {3.73208076622082*^9, 
+   3.7320807766282177`*^9}, {3.7320811440704565`*^9, 3.732081164343891*^9}, {
+   3.7320812410472937`*^9, 3.732081360436063*^9}, {3.7320815449892845`*^9, 
+   3.7320815466364355`*^9}, 3.732082621596795*^9, {3.732083385189928*^9, 
+   3.7320833944615383`*^9}, {3.732087885583984*^9, 3.7320879287276793`*^9}, {
+   3.732088020783112*^9, 3.732088028423563*^9}, {3.7320911356112156`*^9, 
+   3.7320911423289633`*^9}, {3.732093237594162*^9, 3.732093303513032*^9}, {
+   3.732093471002118*^9, 3.7320934883934836`*^9}, {3.732103942301591*^9, 
+   3.7321040172058477`*^9}, {3.7321054306237464`*^9, 3.7321054324310083`*^9}, 
+   3.7321123473626223`*^9, {3.7321124265126286`*^9, 3.7321124270029554`*^9}, {
+   3.732112513791664*^9, 
+   3.7321125162083826`*^9}},ExpressionUUID->"0c0a75e3-4630-4faa-a92a-\
+b60d0ec9250c"],
+
+Cell[TextData[StyleBox["Block imaging - the acquisition of each frame starts \
+immediately after the previous frame. Then the acquisition is stopped to wait \
+till the PC finishes reading the FIFO\ncon: stopping and re-starting the \
+z-stage could take several ms and could be non-deterministic", \
+"Subsubsection"]], "Text",
+ CellChangeTimes->{{3.732083146348145*^9, 3.732083231492646*^9}, {
+  3.732083295036828*^9, 3.732083302852412*^9}, {3.7320834070284758`*^9, 
+  3.7320834098925085`*^9}, {3.73208344841288*^9, 3.732083493908263*^9}, {
+  3.732083712444641*^9, 3.732083749725116*^9}, {3.7320840807574835`*^9, 
+  3.7320840941730223`*^9}, {3.7320950262413845`*^9, 3.732095033329423*^9}, {
+  3.7321037533813753`*^9, 3.7321037718685365`*^9}, {3.732104854109815*^9, 
+  3.7321048545171394`*^9}},ExpressionUUID->"e4439762-533c-49b7-a88c-\
+60685a3e9601"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"tFillUp", " ", "=", " ", 
+    RowBox[{"Nchannels", "*", "Nbits", "*", 
+     RowBox[{"FIFOOUTdepth", " ", "/", 
+      RowBox[{"(", 
+       RowBox[{"BWacquisition", "-", "BWreading"}], ")"}]}]}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+   "Time", " ", "to", " ", "fill", " ", "up", " ", "the", " ", "FIFO"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"tEmpty", " ", "=", " ", 
+    RowBox[{"Nchannels", "*", "Nbits", "*", 
+     RowBox[{"FIFOOUTdepth", " ", "/", "BWreading"}]}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+   "Time", " ", "to", " ", "empty", " ", "a", " ", "full", " ", "FIFO"}], 
+   "*)"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NmaxLines", "=", "1200."}], ";", " ", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Max", " ", "number", " ", "of", " ", "lines", " ", "successfully", " ", 
+    "read", " ", "from", " ", "the", " ", "PC", " ", "before", " ", 
+    "overflowing", " ", 
+    RowBox[{"(", "?", ")"}], " ", "the", " ", "FPGA", " ", "FIFO", " ", 
+    RowBox[{"OUT", ".", " ", "Determined"}], " ", "experimentally"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"NmaxFrames", "=", 
+   RowBox[{"NmaxLines", "/", "NpixHeight"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+   "The", " ", "acquisition", " ", "must", " ", "be", " ", "paused", " ", 
+    "every", " ", "NmaxFrames", " ", "frames", " ", 
+    RowBox[{"(", 
+     RowBox[{"whole", " ", "sample"}], ")"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"Npause", "=", 
+   RowBox[{"Ntiles", "*", 
+    RowBox[{"Nframes", "/", "NmaxFrames"}]}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+   "The", " ", "acquisition", " ", "must", " ", "be", " ", "paused", " ", 
+    "this", " ", "many", " ", "times", " ", 
+    RowBox[{"(", 
+     RowBox[{"whole", " ", "sample"}], ")"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"dtWholeSampleBlock", "=", 
+   RowBox[{"Npause", "*", "tEmpty"}]}], " ", ";", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Total", " ", "additional", " ", "time", " ", "added", " ", "by", " ", 
+    "the", " ", "pauses", " ", 
+    RowBox[{"(", 
+     RowBox[{"whole", " ", "sample"}], ")"}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"tWholeSampleBlock", "=", 
+   RowBox[{"tWholeSampleNoPause", "+", "dtWholeSampleBlock"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Total", " ", "imaging", " ", "time", " ", 
+    RowBox[{"(", 
+     RowBox[{"whole", " ", "sample"}], ")"}]}], "*)"}], "\[IndentingNewLine]",
+   "\[IndentingNewLine]", 
+  RowBox[{"tPerFrameBlock", "=", " ", 
+   RowBox[{"NpixHeight", "*", " ", "Tline"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"Time", " ", "to", " ", "image", " ", "a", " ", "frame"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"ZstageSpeedBlock", "=", " ", 
+   RowBox[{"\[CapitalDelta]z", "/", "tPerFrameBlock"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Speed", " ", "of", " ", "the", " ", "z"}], "-", "stage"}], 
+   "*)"}], "\[IndentingNewLine]"}]}], "Input",
+ CellChangeTimes->{{3.7320770833622494`*^9, 3.732077172937939*^9}, {
+   3.732077341738983*^9, 3.7320773898821907`*^9}, 3.732077531226686*^9, {
+   3.732077978843947*^9, 3.7320780408990684`*^9}, {3.7320783253073044`*^9, 
+   3.7320783256115217`*^9}, {3.732081750556444*^9, 3.7320817568919315`*^9}, {
+   3.732082459996915*^9, 3.732082465908101*^9}, {3.732082586821088*^9, 
+   3.7320825871413164`*^9}, {3.732082677645666*^9, 3.732082688773577*^9}, 
+   3.73208299866413*^9, {3.732083029637126*^9, 3.732083041788785*^9}, {
+   3.732083142061077*^9, 3.7320831432529078`*^9}, {3.732089862431973*^9, 
+   3.7320898728643785`*^9}, {3.732090905065284*^9, 3.7320909257840157`*^9}, {
+   3.732095147841859*^9, 3.7320951482251134`*^9}, {3.732097146643031*^9, 
+   3.732097378827113*^9}, 3.7320974116274347`*^9, {3.732097478746868*^9, 
+   3.7320975544587*^9}, {3.7321009190287743`*^9, 3.732100984476306*^9}, {
+   3.73210266676606*^9, 3.7321026685973654`*^9}, 3.7321037814223137`*^9, {
+   3.732103888789547*^9, 3.73210389428545*^9}, 3.7321041390700793`*^9, {
+   3.7321042105268865`*^9, 3.732104250269499*^9}, {3.7321044083188725`*^9, 
+   3.7321044327332125`*^9}, {3.7321044643667192`*^9, 3.73210449869413*^9}, {
+   3.7321045489418535`*^9, 3.7321046216145086`*^9}, 3.732104715101979*^9, {
+   3.732105128982272*^9, 3.7321051333663855`*^9}, {3.73210565355925*^9, 
+   3.7321056540305867`*^9}, {3.7321057035267773`*^9, 3.732105704630564*^9}, {
+   3.7321057741589785`*^9, 3.7321057753978605`*^9}, {3.7321060960788865`*^9, 
+   3.732106100238845*^9}, 3.73211234842838*^9, {3.7321124798665586`*^9, 
+   3.73211248056406*^9}, {3.7321126400014195`*^9, 
+   3.7321126528375435`*^9}},ExpressionUUID->"b1875b95-646d-4fd7-a671-\
+01ce57392ba1"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Grid", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FIFO depth\>\"", ",", "FIFOOUTdepth", " ", ",", 
+       "\"\<elements\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Acquisition bandwidth\>\"", ",", 
+       RowBox[{"BWacquisition", "/", "Mbps"}], ",", "\"\<Mbps\>\""}], "}"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Reading bandwidth\>\"", ",", 
+       RowBox[{"BWreading", "/", "Mbps"}], ",", "\"\<Mbps\>\""}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Time to fill up the FIFO\>\"", ",", 
+       RowBox[{"tFillUp", "/", "ms"}], ",", "\"\<ms\>\""}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Time to empty a full FIFO\>\"", ",", 
+       RowBox[{"tEmpty", " ", "/", "ms"}], ",", "\"\<ms\>\""}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Lines read without pausing\>\"", ",", "NmaxLines", ",", 
+       "\"\<\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Frames read without pausing\>\"", ",", "NmaxFrames", ",", 
+       "\"\<\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Pause time per frame\>\"", ",", 
+       RowBox[{"tEmpty", " ", "/", "ms"}], ",", "\"\<ms\>\""}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Total pausing time (whole sample)\>\"", ",", 
+       RowBox[{"dtWholeSampleBlock", "/", "hour"}], ",", "\"\<hour\>\""}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Total imaging time(whole sample)\>\"", ",", 
+       RowBox[{"tWholeSampleBlock", "/", "hour"}], ",", "\"\<hour\>\""}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Speed z-stage\>\"", ",", 
+       RowBox[{"ZstageSpeedBlock", "/", "mmps"}], ",", "\"\<mm/s\>\""}], 
+      "}"}]}], "}"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "All"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7320778185069437`*^9, 3.7320779484913836`*^9}, {
+   3.7320779808043404`*^9, 3.7320779987861648`*^9}, {3.7320780328273473`*^9, 
+   3.7320780525153275`*^9}, {3.732078287444384*^9, 3.732078310522794*^9}, {
+   3.732078357947514*^9, 3.7320784419312224`*^9}, {3.7320787753643045`*^9, 
+   3.732078777171585*^9}, {3.732078948771594*^9, 3.732079000803586*^9}, {
+   3.732080753166519*^9, 3.732080755516209*^9}, {3.732081767029155*^9, 
+   3.7320817736948977`*^9}, {3.732082436758395*^9, 3.7320825095251293`*^9}, 
+   3.732082999345615*^9, {3.7320833683499746`*^9, 3.732083368477044*^9}, {
+   3.732084161254737*^9, 3.7320841636774406`*^9}, {3.732090939105487*^9, 
+   3.732090943935923*^9}, {3.7321027149022875`*^9, 3.732102918228837*^9}, {
+   3.7321042609741096`*^9, 3.7321042855976152`*^9}, {3.7321045198461714`*^9, 
+   3.732104521558385*^9}, {3.7321047221349993`*^9, 3.7321047647583075`*^9}, {
+   3.7321060835359683`*^9, 3.732106091559655*^9}, {3.732106140903758*^9, 
+   3.7321061464787226`*^9}, {3.73211237643602*^9, 
+   3.732112378846734*^9}},ExpressionUUID->"5355ec2a-d315-43f5-bc15-\
+fbcc7816bc8f"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"FIFO depth\"\>", "131071", "\<\"elements\"\>"},
+    {"\<\"Acquisition bandwidth\"\>", "409.59999999999997`", "\<\"Mbps\"\>"},
+    {"\<\"Reading bandwidth\"\>", "250.`", "\<\"Mbps\"\>"},
+    {"\<\"Time to fill up the FIFO\"\>", "52.55979949874687`", "\<\"ms\"\>"},
+    {"\<\"Time to empty a full FIFO\"\>", "33.554176000000005`", "\<\"ms\"\>"},
+    {"\<\"Lines read without pausing\"\>", "1200.`", "\<\"\"\>"},
+    {"\<\"Frames read without pausing\"\>", "48.`", "\<\"\"\>"},
+    {"\<\"Pause time per frame\"\>", "33.554176000000005`", "\<\"ms\"\>"},
+    {"\<\"Total pausing time (whole sample)\"\>", 
+     "4.854481481481482`", "\<\"hour\"\>"},
+    {"\<\"Total imaging time(whole sample)\"\>", 
+     "15.705175925925925`", "\<\"hour\"\>"},
+    {"\<\"Speed z-stage\"\>", "0.31999999999999995`", "\<\"mm/s\"\>"}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{3.7320824383455043`*^9, 3.73208253295477*^9}, 
+   3.7320825773703713`*^9, {3.7320826846846514`*^9, 3.732082691291361*^9}, 
+   3.732082799077007*^9, {3.732082942643297*^9, 3.73208294948417*^9}, 
+   3.7320830020815516`*^9, 3.7320830586467695`*^9, {3.7320830912199287`*^9, 
+   3.7320830978976593`*^9}, 3.732083316201897*^9, 3.7320841647151957`*^9, 
+   3.7320876712015553`*^9, 3.7320879739538155`*^9, {3.7320895965289*^9, 
+   3.7320896202637577`*^9}, {3.7320898685883207`*^9, 3.732089877488666*^9}, {
+   3.7320909288411713`*^9, 3.7320909445703745`*^9}, 3.732091144385448*^9, {
+   3.7320912649111195`*^9, 3.7320912895896697`*^9}, {3.732092170443529*^9, 
+   3.732092187037326*^9}, {3.7320932391152306`*^9, 3.732093304838979*^9}, 
+   3.732094970240565*^9, 3.7320951490717163`*^9, 3.7320974666442633`*^9, {
+   3.73209750527273*^9, 3.732097510656556*^9}, 3.7321009866038046`*^9, {
+   3.732102693012705*^9, 3.7321028316302633`*^9}, {3.7321028628024273`*^9, 
+   3.732102918737198*^9}, 3.732102988004448*^9, {3.732103070689613*^9, 
+   3.7321030833746333`*^9}, {3.7321033366972923`*^9, 3.7321033424964232`*^9}, 
+   3.732103373745615*^9, 3.7321034213995175`*^9, {3.7321034805005417`*^9, 
+   3.732103488932517*^9}, {3.7321035392833405`*^9, 3.7321035615691624`*^9}, {
+   3.7321036495387087`*^9, 3.732103657970719*^9}, 3.7321037500710163`*^9, 
+   3.7321037826751876`*^9, 3.732103880509848*^9, {3.7321040823057184`*^9, 
+   3.7321041020577445`*^9}, {3.7321042136351123`*^9, 3.732104286283086*^9}, 
+   3.7321043293477035`*^9, 3.732104438507318*^9, {3.7321044873760633`*^9, 
+   3.7321045499805775`*^9}, {3.732104710698848*^9, 3.732104783501628*^9}, 
+   3.7321049116307135`*^9, 3.7321056560610104`*^9, 3.7321057066890078`*^9, {
+   3.73210577669178*^9, 3.7321058016615353`*^9}, {3.7321061029887824`*^9, 
+   3.7321061163933115`*^9}, 3.732106147060116*^9, 3.732112314199465*^9, {
+   3.7321123538269444`*^9, 3.73211238014564*^9}, 3.732112434664423*^9, 
+   3.7321125177444744`*^9, {3.7321126445106063`*^9, 
+   3.732112656328026*^9}},ExpressionUUID->"0095fb9b-f32c-4317-8e51-\
+92d54a1f80b4"]
+}, Open  ]],
+
+Cell[TextData[StyleBox["Interleaved imaging - After acquiring a frame, the \
+code waits for a certain amount of time for the PC to read the FIFO. The \
+z-stage runs continuously", "Subsubsection"]], "Text",
+ CellChangeTimes->{
+  3.732103551117742*^9, {3.732104857165987*^9, 
+   3.7321048574692063`*^9}},ExpressionUUID->"6a2ff17c-5f70-488b-8097-\
+b430218df9cb"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"tWaitPerFrame", "=", 
+    RowBox[{"1", "*", "Tline"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Waiting", " ", "time", " ", "after", " ", "each", " ", "frame"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"tPerFrameInterleaved", "=", " ", 
+    RowBox[{
+     RowBox[{"NpixHeight", "*", " ", "Tline"}], "+", "tWaitPerFrame"}]}], ";", 
+   RowBox[{"(*", 
+    RowBox[{"Time", " ", "to", " ", "image", " ", "a", " ", "frame"}], "*)"}],
+    "\[IndentingNewLine]", 
+   RowBox[{"BWacquisitionInterleaved", "=", 
+    FractionBox[
+     RowBox[{"NpixHeight", "*", "Nchannels", "*", "Nbits", "*", "NpixWidth"}],
+      "tPerFrameInterleaved"]}], " ", ";", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Because", " ", "of", " ", "multiplexing"}], ",", " ", 
+     RowBox[{
+     "only", " ", "NpixHeight", " ", "lines", " ", "have", " ", "to", " ", 
+      "be", " ", "scanned", " ", "in", " ", "each", " ", "frame"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"dtWholeSampleInterleaved", "=", 
+    RowBox[{"Ntiles", " ", "*", "Nframes", " ", "*", "tWaitPerFrame"}]}], 
+   ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+   "Total", " ", "additional", " ", "time", " ", "from", " ", "waiting", " ", 
+    RowBox[{"(", 
+     RowBox[{"whole", " ", "sample"}], ")"}]}], "*)"}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"tWholeSampleInterleaved", "=", 
+    RowBox[{"tWholeSampleNoPause", "+", "dtWholeSampleInterleaved"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"Total", " ", "imaging", " ", "time", " ", 
+    RowBox[{"(", 
+     RowBox[{"whole", " ", "sample"}], ")"}]}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ZstageSpeedInterleaved", " ", "=", " ", 
+   RowBox[{"\[CapitalDelta]z", "/", "tPerFrameInterleaved"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Speed", " ", "of", " ", "the", " ", "z"}], "-", "stage"}], 
+   "*)"}], "\[IndentingNewLine]"}]}], "Input",
+ CellChangeTimes->{{3.73210321486868*^9, 3.7321032182530584`*^9}, {
+   3.7321032748703136`*^9, 3.7321032766455956`*^9}, {3.7321033822696934`*^9, 
+   3.732103385173775*^9}, {3.7321034502700434`*^9, 3.7321034779086986`*^9}, 
+   3.732103522984726*^9, {3.732103637742339*^9, 3.7321036477024207`*^9}, 
+   3.7321038777367783`*^9, {3.7321040770644083`*^9, 3.7321041001754065`*^9}, {
+   3.7321043341821594`*^9, 3.7321043347655745`*^9}, {3.7321045308700047`*^9, 
+   3.732104542781475*^9}, 
+   3.7321123499464607`*^9},ExpressionUUID->"77daae4b-4ce8-429b-b542-\
+6ee550e951e4"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Grid", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<FIFO depth\>\"", ",", "FIFOOUTdepth", " ", ",", 
+       "\"\<elements\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Waiting time per frame\>\"", ",", 
+       RowBox[{"tWaitPerFrame", "/", "\[Mu]s"}], ",", "\"\<\[Mu]s\>\""}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Acquisition bandwidth\>\"", ",", 
+       RowBox[{"BWacquisitionInterleaved", "/", "Mbps"}], ",", 
+       "\"\<Mbps\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Imaging time per frame\>\"", ",", 
+       RowBox[{"tPerFrameInterleaved", "/", "ms"}], " ", ",", "\"\<ms\>\""}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Total pausing time (whole sample)\>\"", ",", 
+       RowBox[{"dtWholeSampleInterleaved", "/", "min"}], ",", "\"\<min\>\""}],
+       "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Total imaging time(whole sample)\>\"", ",", 
+       RowBox[{"tWholeSampleInterleaved", "/", "hour"}], ",", 
+       "\"\<hours\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Speed z-stage\>\"", ",", 
+       RowBox[{"ZstageSpeedInterleaved", " ", "/", "mmps"}], ",", 
+       "\"\<mm/s\>\""}], "}"}]}], "}"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "All"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.732103570342414*^9, 3.7321036231089153`*^9}, {
+   3.732103697477809*^9, 3.7321037182295628`*^9}, {3.7321037899663906`*^9, 
+   3.7321038077910633`*^9}, 3.732103878225145*^9, {3.7321042929017997`*^9, 
+   3.732104297789307*^9}, {3.732104342902342*^9, 3.73210436474189*^9}, {
+   3.7321045245825405`*^9, 3.7321045260786004`*^9}, 3.7321048135189705`*^9, {
+   3.7321123968355227`*^9, 
+   3.732112400488124*^9}},ExpressionUUID->"990043fc-98f7-4357-bbd0-\
+069fc7657411"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"FIFO depth\"\>", "131071", "\<\"elements\"\>"},
+    {"\<\"Waiting time per frame\"\>", "62.5`", "\<\"\[Mu]s\"\>"},
+    {"\<\"Acquisition bandwidth\"\>", "393.8461538461538`", "\<\"Mbps\"\>"},
+    {"\<\"Imaging time per frame\"\>", "1.6250000000000002`", "\<\"ms\"\>"},
+    {"\<\"Total pausing time (whole sample)\"\>", 
+     "26.041666666666668`", "\<\"min\"\>"},
+    {"\<\"Total imaging time(whole sample)\"\>", 
+     "11.284722222222221`", "\<\"hours\"\>"},
+    {"\<\"Speed z-stage\"\>", "0.30769230769230765`", "\<\"mm/s\"\>"}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{3.7321035708357496`*^9, 3.732103657988717*^9}, {
+   3.732103698801752*^9, 3.7321037187099075`*^9}, 3.73210375009053*^9, {
+   3.7321037826932*^9, 3.732103808309413*^9}, 3.732103880528861*^9, {
+   3.7321040823217287`*^9, 3.7321041020737553`*^9}, {3.7321042136530886`*^9, 
+   3.73210425181958*^9}, 3.7321042983936944`*^9, 3.7321043293707466`*^9, 
+   3.732104364973035*^9, 3.7321044385253296`*^9, {3.7321044873940754`*^9, 
+   3.732104549995603*^9}, 3.7321047107178783`*^9, {3.7321047590502276`*^9, 
+   3.732104783517623*^9}, 3.7321048143465443`*^9, 3.732104911644739*^9, 
+   3.7321056560750375`*^9, 3.732105706710022*^9, {3.7321057767128134`*^9, 
+   3.732105801680549*^9}, {3.73210610300281*^9, 3.7321061164063377`*^9}, 
+   3.732112314218478*^9, 3.7321123538429384`*^9, 3.732112400988467*^9, 
+   3.7321124346864376`*^9, 3.732112517759503*^9, {3.7321126445286403`*^9, 
+   3.732112656352044*^9}},ExpressionUUID->"d5498edd-d003-490e-8a56-\
+ec28d0450f99"]
+}, Open  ]]
+},
+WindowSize->{1280, 717},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 246, 5, 41, "Text", "ExpressionUUID" -> \
+"ed987538-9f4a-443d-b815-4caed904f120"],
+Cell[807, 27, 6872, 154, 591, "Input", "ExpressionUUID" -> \
+"0c0a75e3-4630-4faa-a92a-b60d0ec9250c"],
+Cell[7682, 183, 849, 12, 86, "Text", "ExpressionUUID" -> \
+"e4439762-533c-49b7-a88c-60685a3e9601"],
+Cell[8534, 197, 4664, 98, 240, "Input", "ExpressionUUID" -> \
+"b1875b95-646d-4fd7-a671-01ce57392ba1"],
+Cell[CellGroupData[{
+Cell[13223, 299, 3193, 65, 221, "Input", "ExpressionUUID" -> \
+"5355ec2a-d315-43f5-bc15-fbcc7816bc8f"],
+Cell[16419, 366, 3123, 48, 218, "Output", "ExpressionUUID" -> \
+"0095fb9b-f32c-4317-8e51-92d54a1f80b4"]
+}, Open  ]],
+Cell[19557, 417, 360, 6, 61, "Text", "ExpressionUUID" -> \
+"6a2ff17c-5f70-488b-8097-b430218df9cb"],
+Cell[19920, 425, 2549, 60, 230, "Input", "ExpressionUUID" -> \
+"77daae4b-4ce8-429b-b542-6ee550e951e4"],
+Cell[CellGroupData[{
+Cell[22494, 489, 1952, 41, 145, "Input", "ExpressionUUID" -> \
+"990043fc-98f7-4357-bbd0-069fc7657411"],
+Cell[24449, 532, 1727, 29, 146, "Output", "ExpressionUUID" -> \
+"d5498edd-d003-490e-8a56-ec28d0450f99"]
+}, Open  ]]
+}
+]
+*)
+
