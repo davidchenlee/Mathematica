@@ -1,0 +1,99 @@
+Multiplexed imaging with Nchannels beams
+μm = 10^-6;
+μs=10^-6;
+ms=10^-3;
+ns = 10^-9;
+mm=10^-3;
+kHz=10^3;
+Mbps=10^6;
+min=60;
+hour=3600;
+mmps = 10^-3;
+
+L=10mm;(*Size of the whole sample*)
+Δz=0.5μm;(*spatial sampling in z*)
+Tline=62.5μs;(*Time per scanned line*)
+Tlaser = 12.5ns;(*Laser pulse repetition period*)
+tFPGA = 6.25ns;(*Clock of the FPGA*)
+
+Nchannels=16;(*Number of laser beams*)
+Nbits=4;(*Number of bits per pixel*)
+NpixWidth= 400; (*Number of pixels per line*)
+NpixHeight=25;(*Number of lines per frame, per channel. The total lines in a frame is Nchannels*NpixHeight *)
+Ntiles=50 50;(*Number of tiles*)
+Nframes=10000;(*Number of frames*)
+FIFOOUTdepth = 131071;
+BWacquisition=Nchannels*Nbits NpixWidth/Tline;(*Acquisition bandwidth for Nchannels*)
+BWreading=250.Mbps;(*Bandwidth for transfering the FIFO data from the FPGA to the computer (experimentally measured)*)
+tWholeSampleNoPause=Ntiles*Nframes*NpixHeight* Tline;
+
+Block imaging - the acquisition of each frame starts immediately after the previous frame. Then the acquisition is stopped to wait till the PC finishes reading the FIFO
+con: stopping and re-starting the z-stage could take several ms and could be non-deterministic
+tFillUp = Nchannels*Nbits*FIFOOUTdepth /(BWacquisition-BWreading);(*Time to fill up the FIFO*)
+tEmpty = Nchannels*Nbits*FIFOOUTdepth /BWreading;(*Time to empty a full FIFO*)
+
+NmaxLines=1200.; (*Max number of lines successfully read from the PC before overflowing (?) the FPGA FIFO OUT. Determined experimentally*)
+NmaxFrames=NmaxLines/NpixHeight;(*Number of frames in a block (whole sample)*)
+Npause=Ntiles*Nframes/NmaxFrames;(*Total time pausing (whole sample)*)
+tPause=0.5*tEmpty (*Time pausing per block*)
+dtWholeSampleBlock=Npause*tPause ;(*Total additional time added by pausing (whole sample) *)
+tWholeSampleBlock=tWholeSampleNoPause+dtWholeSampleBlock;(*Total imaging time (whole sample)*)
+tPerFrameBlock= NpixHeight* Tline;(*Time to image a frame*)
+tPerBlock= tPerFrameBlock NmaxFrames;(*Time to image a block*)
+ZstageSpeedBlock= Δz/tPerFrameBlock;(*Speed of the z-stage*)
+
+0.0167771
+Grid[{{"#","PARAMETER","VALUE" ,"UNITS","COMMENTS"},
+{"1","FIFO depth",FIFOOUTdepth ,"elements"},
+{"2","Acquisition bandwidth",BWacquisition/Mbps,"Mbps","Calculated. Exact"},
+{"3","Reading bandwidth",BWreading/Mbps,"Mbps","Measured"},
+{"4","Time to fill up the FIFO",tFillUp/ms,"ms"},
+{"5","Time to empty a full FIFO",tEmpty /ms,"ms","> time to pause the acquisition"},
+{"6","# lines per block",NmaxLines,"-","Rought approx"},
+{"7","# frames per block",NmaxFrames,"-"},
+{"8","Time imaging per block",tPerBlock/ms,"ms","Longer than #4. Probably the FIFO's BW measurement is off"},
+{"9","Time pausing per block",tPause/ms,"ms","Probably a fraction of #5"},
+{"10","Total pausing time (whole sample)",dtWholeSampleBlock/hour,"hour"},
+{"11","Total imaging time(whole sample)",tWholeSampleBlock/hour,"hour","Without considering the shifting in XY and the VT cutting"},
+{"12","Speed z-stage",ZstageSpeedBlock/mmps,"mm/s"}},Frame->All]
+#	PARAMETER	VALUE	UNITS	COMMENTS
+1	FIFO depth	131071	elements	
+2	Acquisition bandwidth	409.6	Mbps	Calculated. Exact
+3	Reading bandwidth	250.	Mbps	Measured
+4	Time to fill up the FIFO	52.5598	ms	
+5	Time to empty a full FIFO	33.5542	ms	> time to pause the acquisition
+6	# lines per block	1200.	-	Rought approx
+7	# frames per block	48.	-	
+8	Time imaging per block	75.	ms	Longer than #4. Probably the FIFO's BW measurement is off
+9	Time pausing per block	16.7771	ms	Probably a fraction of #5
+10	Total pausing time (whole sample)	2.42724	hour	
+11	Total imaging time(whole sample)	13.2779	hour	Without considering the shifting in XY and the VT cutting
+12	Speed z-stage	0.32	mm/s	
+
+
+Interleaved imaging - After acquiring a frame, the code waits for number of RS swings so that the PC finish reading the FIFO. The z-stage runs continuously
+NwaitLinesPerFrame=15;(*Wait for this amount of RS swings between frames*)
+tWaitPerFrame=NwaitLinesPerFrame*Tline;(*Waiting time after each frame*)
+tPerFrameInterleaved= NpixHeight* Tline+tWaitPerFrame;(*Time to image a frame*)
+BWacquisitionInterleaved=(NpixHeight*Nchannels*Nbits*NpixWidth)/tPerFrameInterleaved ;(*Because of multiplexing, only NpixHeight lines have to be scanned in each frame*)
+dtWholeSampleInterleaved=Ntiles *Nframes *tWaitPerFrame;(*Total additional time from waiting (whole sample)*)
+tWholeSampleInterleaved=tWholeSampleNoPause+dtWholeSampleInterleaved;(*Total imaging time (whole sample)*)
+ZstageSpeedInterleaved = Δz/tPerFrameInterleaved;(*Speed of the z-stage*)
+
+Grid[{{"#","PARAMETER","VALUE","UNITS","COMMENTS"},
+{"1","FIFO depth",FIFOOUTdepth ,"elements"},
+{"2","# waiting lines between frame",NwaitLinesPerFrame,"-","Increase till #4 close to the measured value"},
+{"3","Imaging time per frame",tPerFrameInterleaved/ms ,"ms"},
+{"4","Interleaved imaging bandwidth",BWacquisitionInterleaved/Mbps,"Mbps","Of course lower than without waiting"},
+{"5","Total pausing time (whole sample)",dtWholeSampleInterleaved/hour,"hour"},
+{"6","Total imaging time(whole sample)",tWholeSampleInterleaved/hour,"hours"},
+{"7","Speed z-stage",ZstageSpeedInterleaved /mmps,"mm/s"}},Frame->All]
+#	PARAMETER	VALUE	UNITS	COMMENTS
+1	FIFO depth	131071	elements	
+2	# waiting lines between frame	15	-	Increase till #4 close to the measured value
+3	Imaging time per frame	2.5	ms	
+4	Interleaved imaging bandwidth	256.	Mbps	Of course lower than without waiting
+5	Total pausing time (whole sample)	6.51042	hour	
+6	Total imaging time(whole sample)	17.3611	hours	
+7	Speed z-stage	0.2	mm/s	
+

@@ -1,0 +1,63 @@
+Laser parameters for Coherent Chamaleon Vision II
+W=1;
+mW=10^-3;
+kW=10^3;
+MW=10^6;
+J=1;
+mJ=10^-3;
+μJ=10^-6;
+nJ=10^-9;
+kJ=10^3;
+mm=10^-3;
+nm=10^-9;
+cm=10^-2;
+MHz=10^6;
+fs=10^-15;
+λ=800 nm;(*wavelength*)
+r=0.6mm; (*radius*)
+f=80 MHz; (*repetition rate*)
+Δt=140 fs;(*pulse width*)
+
+Average and peak values
+(*AVERAGE VALUES*)
+Pavg=3 W; (*power*)
+Iavg=Pavg/(π r^2);(*intensity*)
+(*PEAK VALUES*)
+Ppeak=Pavg/(Δt f);(*power*)
+Ipeak=Ppeak/(π r^2);(*intensity*)
+
+(*ENERGY*)
+Energy=Pavg/f;(*energy*)
+nE=Energy/(π r^2);(*Energy density*)
+
+Grid[{{"","Average","","Peak",""},
+{"Power P",Pavg,"W",1.Ppeak/kW,"kW"},
+{"Intensity I",Iavg/(W/cm^2),"W/cm^2", Ipeak/(MW/cm^2),"MW/cm^2" }},Frame->All]
+	Average		Peak	
+Power P	3	W	267.857	kW
+Intensity I	265.258	W/cm^2	23.6838	MW/cm^2
+
+
+Grid[{{"Energy E",1.Energy/nJ,"nJ"},
+{"Energy density nE",1.nE/(μJ/cm^2),"μJ/cm^2"}},Frame->All]
+Energy E	37.5	nJ
+Energy density nE	3.31573	μJ/cm^2
+
+
+The typical beam power needed for a 2-photon transition is 10 mW. The energy is then E=Ppeak*Δt=Pavg/f
+((10. mW)/f)/nJ
+0.125
+Damage threshold (LDT)
+Ref: http://www.semrock.com/laser-damage-threshold.aspx
+
+Ultrafast lasers ( < 100 fs) can have very large peak powers, and the high electric fields associated with these pulses directly attack electronic bonds of dielectric materials causing some very interesting effects.  Yet the peak intensity LDT values required for these effects to cause significant damage are generally so high that the laser damage is still dominated by thermal damage mechanisms associated with the average intensity.
+
+
+it says that the diameter is in cm, but the result does not agree with their online calculator
+LDT = 1J/cm^2;(*laser damage threshold*)
+λspec=800nm;(*wavelength at which the LDT is specified*)
+LDTcor=10000 W/J λ/λspec LDT;(*corrected LDT. For fs pulse at MHz repetition, the laser behaves as CW. However, this formula is only an estimation!! *)
+
+1.LDTcor/(W/cm^2)
+10000.
+If the average intensity Pavg/(π r^2)is greater than LDTcorr, then there is laser damage!

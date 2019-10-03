@@ -1,0 +1,11 @@
+(*source: Murphy*)
+nm=10^-9;
+n=1.4;(*refractive index*)
+na=1.1; (*numerical aperture of the objective*)
+λ=800;(*excitation? wavelength*)
+(*optical lateral resolution*)
+0.325 λ/Sqrt[2] na^0.91
+(*optical axial resolution*)
+0.532 λ/Sqrt[2] (1/(n-Sqrt[n^2-na^2]))
+200.505
+563.594

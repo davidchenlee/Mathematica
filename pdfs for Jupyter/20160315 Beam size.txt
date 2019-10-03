@@ -1,0 +1,60 @@
+[1] Young 2015, 'A pragmatic guide to multiphoton microscope design', p305
+[2] Specs from the website and the quote from Olympus
+
+μm = 10^-6;
+μs=10^-6;
+ns = 10^-9;
+μrad=10^-6;
+mm=10^-3;
+nm=10^-9;
+Tera=10^12;
+kHz=10^3;
+Mega=10^6;
+Giga = 10^9;
+λ=800 nm;
+
+Objective parameters [2]
+fo=7.2 mm;(*focal length of the objective. I asked Olympus*)
+NA = 1.0 ;(*numerical aperture of the objective [2]*)
+Dobj=2 NA fo;(*objective back aperture*)
+FOV=18 mm/25 /Sqrt[2];(*estimated required FOV (arbitrary)*)
+ft=200mm;(*focal length of the tube lens*)
+fs=45mm;(*focal length of the scan lens*)
+α=8;(*number of beamlets*)
+dot=180 mm;(*distance between the objective and the tube lens. It is arbitrary*)
+
+At the sample
+ΔLo=FOV/α;(*lateral travel at the sample for each beam*)
+At the Objective
+θmaxo=(FOV/2)/ fo;(*max scan angle at the objective back focal plane. Note that this is amplitude, not peak-to-peak*)
+At the tube lens
+ΔLt=ft/fo ΔLo ;(*lateral travel = interbeam distance at the tube lens*)
+Dtb = 2dot θmaxo + Dobj;(*minimun clear aperture of the tube lens: Dtb ≥ 2 ft θmaxo + Dobj. See eq.24 in [1]*)
+dt=(4λ )/π   ft/Dobj;(*single-beam diameter at the focus of the tube lens. Saleh eq 3.2-17*)
+DOFt=(8λ )/π  ( ft/Dobj)^2; (*depth of focus at the focus of the tube lens. Saleh eq. 3.2-7 with z=0 and z0>>f*)
+At the scanning mirror
+dm=fs/ft Dobj;(*single-beam diameter at the scanning mirror (telescopic equation)*)
+θmaxm=ft/fs θmaxo; (*max scan angle at the scanning mirror (telescopic equation). This is an amplitude, not the peak-to-peak angle*)
+Δdm=fs/ft ft/fo FOV /α;(*interbeam distance at the mirror*)
+
+At the scan lens
+Dm=2*fs*θmaxm +dm ;(*minimum diameter of the scan lens*)
+Grid[{{"","Sample","Objective BFP","Tube lens","Interm. image","Scan lens","Scanning mirror"},
+{"Focal length","-",fo/mm "mm",ft/mm "mm","-",fs/mm"mm","-"},
+{"single-beam diameter","-",Dobj/mm"mm",Dobj/mm"mm",dt/μm"μm",dm/mm "mm", dm/mm "mm"},
+{"Interbeamlet separation",1.ΔLo/μm "μm",0,ΔLt/mm"mm",ΔLt/mm"mm",ΔLt/mm"mm",0},
+{"aperture",1.FOV/μm"μm",Dobj/mm"mm",Dtb/mm"mm","-",Dm/mm"mm",dm/mm "mm"},
+{"Max. angle","-",θmaxo 180/π"°",0,0,0,θmaxm 180/π"°"},
+{"Depth of focus","-","-","-",DOFt/mm"mm","-","-"}},Frame->All]
+	Sample	Objective BFP	Tube lens	Interm. image	Scan lens	Scanning mirror
+Focal length	-	7.2 mm	200 mm	-	45 mm	-
+single-beam diameter	-	14.4 mm	14.4 mm	14.1471 μm	3.24 mm	3.24 mm
+Interbeamlet separation	63.6396 μm	0	1.76777 mm	1.76777 mm	1.76777 mm	0
+aperture	509.117 μm	14.4 mm	27.1279 mm	-	17.3821 mm	3.24 mm
+Max. angle	-	2.02571 °	0	0	0	9.00316 °
+Depth of focus	-	-	-	0.392975 mm	-	-
+
+
+θresolution=ft/fs (300 nm)/fo;(*angular reproducibility at the scanning mirror*)
+θresolution/μrad
+185.185

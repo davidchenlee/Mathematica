@@ -1,0 +1,184 @@
+μm = 10^-6;
+μs=10^-6;
+ms=10^-3;
+ns = 10^-9;
+mm=10^-3;
+kHz=10^3;
+fscan = 50mm;(*Focal length of the scan lens*)
+ftube=200mm;(*Focal length of the tube lens*)
+fObj = 7.2 mm;(*Focal length of the objective*)
+n=16;(*Number of beamlets*)
+Δx=0.5μm;(*Sampling resolution*)
+Npix=n*35;(*Number of pixels*)
+FFOV =Npix*Δx;(*Scanned full field of view. The FFOV of the objective is ~0.5mm*)
+M=ftube/fscan;(*Magnification*)
+FFOV/μm
+280.
+1. SINGLE BEAM
+θmax= ArcTan[(FFOV/2)/fObj];(*Max optical angle wrt the symmetry axis measured at the objective*)
+(*Optical angle FFOV at the OBJECTIVE*)
+2*θmax/Degree
+(*Optical angle FFOV at the SCANNING MIRROR*)
+2*θmax*M/Degree
+(*Mech angle FFOV at the SCANNING MIRROR. Mech. angle = optical angle/2*)
+θmax*M/Degree
+2.22789
+8.91155
+4.45578
+2. MULTIPLEXING: n beams evenly spaced
+Δθ = (2θmax)/n;(*"Optical angle FFOV covered by each beamlet measured at the objective*)
+θ[ii_,α_]:=(-1+1/n)*θmax+ii*Δθ+α (Δθ/2) (*Optical angle of each beamlet measured at the objective. ii = beam index, α = beam position [-1,1]*)
+2.1. Angles at the OBJECTIVE
+header={{"Beam No.",""},{"Angle(°)","centered"},{"Angle(°)","neg. swing"},{"Angle(°)","pos. swing"}};
+Labeled[TableForm[Prepend[Table[{ii+1,θ[ii,0]/Degree,θ[ii,-1]/Degree,θ[ii,1]/Degree},{ii,0,15}],header]],"Optical angles at the OBJECTIVE",Top]
+
+Optical angles at the OBJECTIVE
+Beam No.
+
+
+	Angle(°)
+centered
+
+	Angle(°)
+neg. swing
+
+	Angle(°)
+pos. swing
+
+
+1	-1.04432	-1.11394	-0.974701
+2	-0.90508	-0.974701	-0.835458
+3	-0.765837	-0.835458	-0.696215
+4	-0.626594	-0.696215	-0.556972
+5	-0.487351	-0.556972	-0.417729
+6	-0.348108	-0.417729	-0.278486
+7	-0.208865	-0.278486	-0.139243
+8	-0.0696215	-0.139243	-2.48481*10^-17
+9	0.0696215	2.48481*10^-17	0.139243
+10	0.208865	0.139243	0.278486
+11	0.348108	0.278486	0.417729
+12	0.487351	0.417729	0.556972
+13	0.626594	0.556972	0.696215
+14	0.765837	0.696215	0.835458
+15	0.90508	0.835458	0.974701
+16	1.04432	0.974701	1.11394
+
+
+
+
+(*Optical angle FFOV covered by each beam measured AT THE OBJECTIVE*)
+(θ[0,1]-θ[0,-1])/Degree
+(*Mech angle FFOV covered by each beam measured AT THE OBJECTIVE*. Mech. angle = optical angle/2*)
+(θ[0,1]-θ[0,-1])/2/Degree
+0.139243
+0.0696215
+2.1. Angles at the SCANNING MIRROR
+header={{"Beam No.",""},{"Angle(°)","centered"},{"Angle(°)","neg. swing"},{"Angle(°)","pos. swing"}};
+Labeled[TableForm[Prepend[Table[{ii+1,θ[ii,0]*M/Degree,θ[ii,-1]*M/Degree,θ[ii,1]*M/Degree},{ii,0,15}],header]],"Optical angles at the SCANNING MIRROR",Top]
+Optical angles at the SCANNING MIRROR
+Beam No.
+
+
+	Angle(°)
+centered
+
+	Angle(°)
+neg. swing
+
+	Angle(°)
+pos. swing
+
+
+1	-4.17729	-4.45578	-3.8988
+2	-3.62032	-3.8988	-3.34183
+3	-3.06335	-3.34183	-2.78486
+4	-2.50637	-2.78486	-2.22789
+5	-1.9494	-2.22789	-1.67092
+6	-1.39243	-1.67092	-1.11394
+7	-0.835458	-1.11394	-0.556972
+8	-0.278486	-0.556972	-9.93923*10^-17
+9	0.278486	9.93923*10^-17	0.556972
+10	0.835458	0.556972	1.11394
+11	1.39243	1.11394	1.67092
+12	1.9494	1.67092	2.22789
+13	2.50637	2.22789	2.78486
+14	3.06335	2.78486	3.34183
+15	3.62032	3.34183	3.8988
+16	4.17729	3.8988	4.45578
+
+
+
+
+(*Optical angle FFOV covered by the SCANNING MIRROR*)
+(θ[0,1]-θ[0,-1])*M/Degree
+(*Mech angle FFOV covered by the SCANNING MIRROR. Mech. angle = optical angle/2*)
+(θ[0,1]-θ[0,-1])*M/2/Degree
+0.556972
+0.278486
+3.1. Beam position at the SAMPLE PLANE
+x[θ_]:=fObj*Tan[θ](*Beam position*)
+header={{"Beam No.",""},{"Position [μm]","centered"},{"Position [μm]","neg. swing"},{"Position [μm]","pos. swing"}};
+Labeled[TableForm[Prepend[Table[{ii+1,x[θ[ii,0]]/μm,x[θ[ii,-1]]/μm,x[θ[ii,1]]/μm},{ii,0,15}],header]],"Beam position at the focal plane",Top]
+Beam position at the focal plane
+Beam No.
+
+
+	Position [μm]
+centered
+
+	Position [μm]
+neg. swing
+
+	Position [μm]
+pos. swing
+
+
+1	-131.248	-140.	-122.496
+2	-113.745	-122.496	-104.994
+3	-96.2436	-104.994	-87.4933
+4	-78.7432	-87.4933	-69.9934
+5	-61.2438	-69.9934	-52.4943
+6	-43.745	-52.4943	-34.9959
+7	-26.2468	-34.9959	-17.4978
+8	-8.7489	-17.4978	-3.1225*10^-15
+9	8.7489	3.1225*10^-15	17.4978
+10	26.2468	17.4978	34.9959
+11	43.745	34.9959	52.4943
+12	61.2438	52.4943	69.9934
+13	78.7432	69.9934	87.4933
+14	96.2436	87.4933	104.994
+15	113.745	104.994	122.496
+16	131.248	122.496	140.
+
+
+
+
+(*ANGLES FOR THE DOE BEAM SPLITTER************************************)
+header={{"Beam No."},{"Angle(deg)"},{"Angle(rad)"}};
+TableForm[Prepend[Table[{ii+1,NumberForm[θ[ii,0]*M/Degree,15],NumberForm[θ[ii,0]*M,15]},{ii,0,15}],header]]
+Beam No.	Angle(deg)	Angle(rad)
+1	-4.17729085025033	-0.0729074791503016
+2	-3.62031873688362	-0.0631864819302614
+3	-3.06334662351691	-0.0534654847102212
+4	-2.5063745101502	-0.043744487490181
+5	-1.94940239678349	-0.0340234902701408
+6	-1.39243028341678	-0.0243024930501005
+7	-0.835458170050065	-0.0145814958300603
+8	-0.278486056683355	-0.00486049861002011
+9	0.278486056683355	0.00486049861002011
+10	0.835458170050066	0.0145814958300603
+11	1.39243028341678	0.0243024930501005
+12	1.94940239678349	0.0340234902701408
+13	2.5063745101502	0.043744487490181
+14	3.06334662351691	0.0534654847102212
+15	3.62031873688362	0.0631864819302614
+16	4.17729085025033	0.0729074791503016
+
+
+Grid[{{"","Angle (deg)","Angle (rad)"},
+{"Full angle",NumberForm[(θ[15,0]-θ[0,0])*M/Degree,10],NumberForm[(θ[15,0]-θ[0,0])*M,10]},
+{"Separation angle",NumberForm[(θ[0,1]-θ[0,-1])*M/Degree,10],NumberForm[(θ[0,1]-θ[0,-1])*M,10]}},Frame->All]
+	Angle (deg)	Angle (rad)
+Full angle	8.354581701	0.1458149583
+Separation angle	0.5569721134	0.00972099722
+

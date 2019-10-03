@@ -1,0 +1,22 @@
+(*Transimpedance amplifier using TI OPA657
+[1] TI application report, AN-1803 design considerations for a transimp amp
+[2] TI application report, Compensate tranimp damp intuitively *)
+pF=10^-12;
+kΩ=10^3;
+MΩ = 10^6;
+MHz=10^6;
+ns=10^-9;
+
+Cpmt= 21.8pF;
+GBW=1600 MHz;
+(*Eqs. 3 and 4 in *)
+Rf=1kΩ;
+f3dB=Sqrt[(GBW/(2π Cpmt Rf))]/MHz (*cut-off freq at 3dB. Eq. 4 in [1]*)
+cf=Sqrt[(Cpmt/(2π Rf GBW))]/pF (*feedback capacitor for a smooth freq response. Eq. 3 in [1]*)
+(*cf=1/(4π Rf GBW)(1+Sqrt[1+8π Rf Cpmt GBW])/pF(*More precise equation. Eq. 5 in [2]*)
+108.079
+1.47258
+T=20ns;(*fall time, from 90% to 10%*)
+τ=T/Log[9.];(*exponential time constant*)
+1/τ/MHz(*bandwidth*)
+109.861

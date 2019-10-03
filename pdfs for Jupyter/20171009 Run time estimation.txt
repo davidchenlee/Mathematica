@@ -1,0 +1,87 @@
+Calculate the data size of an entire image and the scanning time
+TB: binary vs decimal basis, http://knowledge.seagate.com/articles/en_US/FAQ/194563en
+μm = 10^-6;
+μs=10^-6;
+ms=10^-3;
+ns = 10^-9;
+mm=10^-3;
+Tera=10^12; (*Decimal base*)
+kHz=10^3;
+Mega=10^6;
+Giga = 10^9;
+byte=8;
+
+bpp=8; (*Bits per pixel*)
+Δx=0.5μm;(*Spatial sampling rate in x and y. Optical resolution is twice this*)
+Δz=0.5 μm;(*Spatial sampling in z. The pptical resolution is twice this*)
+Lz=0.5mm;(*Section thickness*)
+FFOV=0.25mm;(*Full field of view (tile size)*)
+Zmax=150μm;(*Thickness of each z-section*)
+γ=0.8;(*Prefactor that accounts for the dead time at the turning points*)
+tshiftXY =1ms;
+tshiftZ=0.1ms;(*The z-stage can do 20mm/s = 20μm/ms = 1μm in 0.05ms*)
+Tcutting=60;
+Tline=1/(2*8 kHz);(*Scanning time per line. The resonant scanner does a round trip in 8kHz*)
+Npix= FFOV/Δx ;(*A tile has a total of Npix^2 pixels*)
+dwellTime=γ Tline/Npix ;(*Dwell time [s/pix]*)
+
+Ttile[n_] := Npix*Tline/n(*Scanning time per tile. n is the number of beamlets. Note that the dead time at the turning points must be considered*)
+
+Ntiles[L_]:=(L/FFOV)^2(*Number of tiles in a plane*)
+Npixz[L_]:=L/Δz(*Total number of pixels in the z direction*)
+Npixtotal[L_]:=(L/Δx)^2 L/Δz(*Total number of pixels in the sample*)
+Nsecz[L_] := L/Zmax(*Number of z-sections in the sample*)
+
+time[L_,n_]:=Ntiles[L] Npixz[L](Ttile[n]+tshiftZ)+Nsecz[L]Ntiles[L]tshiftXY +Nsecz[L]Tcutting(*Toal scanning time per sample (per channel)*)
+time[10mm,16]/3600
+Plot[Npix^2 *t ns/ms,{t,0,100},PlotRange->{0,0.03/ms},AxesLabel->{"pixel dwell time [ns]","Runtime per tile, single beam [ms]"}];
+19.3907
+L=10mm;
+Ntiles[L] Npixz[L]Ttile[16]/3600(*total scanning time*)
+Ntiles[L] Npixz[L]tshiftZ/3600(*total z-shifting time. Covering larger tiles decreases the shifting in z*)
+Nsecz[L]Ntiles[L]tshiftXY/3600(*total xy-shifting time. Covering larger tiles decreases the shifting in xy*)
+Nsecz[L]Tcutting/3600.(*total cutting time. This term is basically fixed*)
+17.3611
+0.888889
+0.0296296
+1.11111
+DataSize[L_,Δx_]:=(L/Δx)^2 (L/Δz)*bpp  (*Data size in bits PER CHANNEL*)
+Show[Plot[Evaluate[Table[DataSize[dummy mm,dummy2 μm],{dummy,4,10,2}]/(Tera*byte)],{dummy2,0.05,0.6},AxesOrigin->{0,0},PlotRange->{0,45},PlotLegends-> {"L = 4 mm","L = 6 mm","L = 8 mm","L = 10 mm"},AxesLabel->{"Voxel size[μm]","TeraBytes (decimal base)"},GridLines->{{},{8,16,24,32,40}},GridLinesStyle->Directive[Black, Dashed],PlotLabel->"Image size (per channel) vs voxel size"],Graphics[Table[Text[ToString[i]"TB",{0.55,i+.8}],{i,8,40,8}]]]
+	L = 4 mm
+	L = 6 mm
+	L = 8 mm
+	L = 10 mm
+
+
+(*Running time PER CHANNEL*)
+Plot[Evaluate[Table[time[dummy mm,2^i]/3600,{i,0,4}]],{dummy,0,10},PlotRange->{0,100},AxesLabel->{"length[mm]","hours"},PlotLegends->Table[2^i,{i,0,6}],GridLines->{{},{24,48,72,96}},GridLinesStyle->Directive[Black, Dashed],PlotLabel->"Running time (per channel) vs sample size"]
+	1
+	2
+	4
+	8
+	16
+
+
+L=10mm; (*Sample size*)
+Npixtotal[L]
+1/Ttile[1](*frames (tiles) per second*)
+8.*10^12
+32.
+How much time does it take to fully transfer a 8TB (decimal base) HDD
+HDD=8*Tera*byte; (*Max HDD capacity in bits*)
+busrate=10 10^9;(*Transfer rate in bps*)
+1.*HDD/busrate/3600 (*Time to transfer a 8TB HDD [in hours]*)
+1.77778
+(*Data-saving speed required [MB/s] for 16 beamlets. A commercial HDD writes at 150 MB/s*)
+16 
+FFOV/Δx bpp/(Tline*Mega*byte)
+128.
+(*Quick estimations*)
+L=10mm; (*sample size*)
+Δx=0.5μm;
+bpp=8; (*bits per pixel*)
+3((L/Δx)^3) bpp (1/(Tera*byte ))(*Data size for 3 channels*)
+24.
+(*Runtime for 3 channel [hours]*)
+3 L^3/Δx^2 (Tline/(FFOV*16))/3600
+52.0833
